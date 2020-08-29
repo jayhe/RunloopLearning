@@ -68,8 +68,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "197"
             endingLineNumber = "197"
-            landmarkName = "HCAnotherUncaughtExceptionHandles(exception)"
-            landmarkType = "9">
+            landmarkName = "HCUncaughtExceptionHandler"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -84,8 +84,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "201"
             endingLineNumber = "201"
-            landmarkName = "HCUncaughtExceptionHandles(exception)"
-            landmarkType = "9">
+            landmarkName = "HCUncaughtExceptionHandler"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

@@ -168,6 +168,7 @@ void MineSetUncaughtExceptionHandler(NSUncaughtExceptionHandler * _Nullable hand
      */
     //[Bugly startWithAppId:@"7e8a06bf19"];
     NSSetUncaughtExceptionHandler(&HCUncaughtExceptionHandles);
+    // 测试重复加入一个handler，验证去重逻辑
     NSSetUncaughtExceptionHandler(&HCAnotherUncaughtExceptionHandles);
     NSSetUncaughtExceptionHandler(&HCAnotherUncaughtExceptionHandles);
     NSSetUncaughtExceptionHandler(&HCAnotherUncaughtExceptionHandles);
