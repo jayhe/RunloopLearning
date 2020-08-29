@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04EDDC1F1BFB189642B595DB /* libPods-RunloopLearning.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24C2EDACB72D839E8F6D7652 /* libPods-RunloopLearning.a */; };
 		1001D9E6222E0BD000E5EBEF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1001D9E5222E0BD000E5EBEF /* AppDelegate.m */; };
 		1001D9E9222E0BD000E5EBEF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1001D9E8222E0BD000E5EBEF /* ViewController.m */; };
 		1001D9EC222E0BD000E5EBEF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1001D9EA222E0BD000E5EBEF /* Main.storyboard */; };
@@ -14,6 +15,8 @@
 		1001D9F1222E0BD200E5EBEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1001D9EF222E0BD200E5EBEF /* LaunchScreen.storyboard */; };
 		1001D9F4222E0BD200E5EBEF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1001D9F3222E0BD200E5EBEF /* main.m */; };
 		1001D9FE222E0BD200E5EBEF /* RunloopLearningTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1001D9FD222E0BD200E5EBEF /* RunloopLearningTests.m */; };
+		10F2DB582396328D00BA107A /* HCUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 10F2DB572396328D00BA107A /* HCUncaughtExceptionHandler.m */; };
+		10F2DB5B2396630A00BA107A /* HCSignalHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 10F2DB5A2396630A00BA107A /* HCSignalHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,13 @@
 		1001D9F9222E0BD200E5EBEF /* RunloopLearningTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunloopLearningTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1001D9FD222E0BD200E5EBEF /* RunloopLearningTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RunloopLearningTests.m; sourceTree = "<group>"; };
 		1001D9FF222E0BD200E5EBEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		10F2DB562396328D00BA107A /* HCUncaughtExceptionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HCUncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		10F2DB572396328D00BA107A /* HCUncaughtExceptionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HCUncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		10F2DB592396630A00BA107A /* HCSignalHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HCSignalHandler.h; sourceTree = "<group>"; };
+		10F2DB5A2396630A00BA107A /* HCSignalHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HCSignalHandler.m; sourceTree = "<group>"; };
+		24C2EDACB72D839E8F6D7652 /* libPods-RunloopLearning.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RunloopLearning.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		33ECF7316F712EF91FFDDEAB /* Pods-RunloopLearning.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunloopLearning.release.xcconfig"; path = "Target Support Files/Pods-RunloopLearning/Pods-RunloopLearning.release.xcconfig"; sourceTree = "<group>"; };
+		99063522C5DDC7559C5FB504 /* Pods-RunloopLearning.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunloopLearning.debug.xcconfig"; path = "Target Support Files/Pods-RunloopLearning/Pods-RunloopLearning.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04EDDC1F1BFB189642B595DB /* libPods-RunloopLearning.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +77,8 @@
 				1001D9E3222E0BD000E5EBEF /* RunloopLearning */,
 				1001D9FC222E0BD200E5EBEF /* RunloopLearningTests */,
 				1001D9E2222E0BD000E5EBEF /* Products */,
+				A786FCB893DA99A2136431F8 /* Pods */,
+				B8C42DC4F6C99275F69C6B02 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,6 +94,7 @@
 		1001D9E3222E0BD000E5EBEF /* RunloopLearning */ = {
 			isa = PBXGroup;
 			children = (
+				10F2DB55239631A700BA107A /* ExceptionHandle */,
 				1001D9E4222E0BD000E5EBEF /* AppDelegate.h */,
 				1001D9E5222E0BD000E5EBEF /* AppDelegate.m */,
 				1001D9E7222E0BD000E5EBEF /* ViewController.h */,
@@ -103,6 +117,35 @@
 			path = RunloopLearningTests;
 			sourceTree = "<group>";
 		};
+		10F2DB55239631A700BA107A /* ExceptionHandle */ = {
+			isa = PBXGroup;
+			children = (
+				10F2DB562396328D00BA107A /* HCUncaughtExceptionHandler.h */,
+				10F2DB572396328D00BA107A /* HCUncaughtExceptionHandler.m */,
+				10F2DB592396630A00BA107A /* HCSignalHandler.h */,
+				10F2DB5A2396630A00BA107A /* HCSignalHandler.m */,
+			);
+			path = ExceptionHandle;
+			sourceTree = "<group>";
+		};
+		A786FCB893DA99A2136431F8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				99063522C5DDC7559C5FB504 /* Pods-RunloopLearning.debug.xcconfig */,
+				33ECF7316F712EF91FFDDEAB /* Pods-RunloopLearning.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B8C42DC4F6C99275F69C6B02 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24C2EDACB72D839E8F6D7652 /* libPods-RunloopLearning.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -110,6 +153,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1001DA02222E0BD200E5EBEF /* Build configuration list for PBXNativeTarget "RunloopLearning" */;
 			buildPhases = (
+				4023BD397A68FAEF2AA6A422 /* [CP] Check Pods Manifest.lock */,
 				1001D9DD222E0BD000E5EBEF /* Sources */,
 				1001D9DE222E0BD000E5EBEF /* Frameworks */,
 				1001D9DF222E0BD000E5EBEF /* Resources */,
@@ -198,6 +242,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4023BD397A68FAEF2AA6A422 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RunloopLearning-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1001D9DD222E0BD000E5EBEF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -205,7 +274,9 @@
 			files = (
 				1001D9E9222E0BD000E5EBEF /* ViewController.m in Sources */,
 				1001D9F4222E0BD200E5EBEF /* main.m in Sources */,
+				10F2DB5B2396630A00BA107A /* HCSignalHandler.m in Sources */,
 				1001D9E6222E0BD000E5EBEF /* AppDelegate.m in Sources */,
+				10F2DB582396328D00BA107A /* HCUncaughtExceptionHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +432,7 @@
 		};
 		1001DA03222E0BD200E5EBEF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99063522C5DDC7559C5FB504 /* Pods-RunloopLearning.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -378,6 +450,7 @@
 		};
 		1001DA04222E0BD200E5EBEF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33ECF7316F712EF91FFDDEAB /* Pods-RunloopLearning.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

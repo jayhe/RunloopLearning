@@ -1,0 +1,20 @@
+PODS:
+  - Bugly (2.5.4)
+  - fishhook (0.2)
+
+DEPENDENCIES:
+  - Bugly
+  - fishhook
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Bugly
+    - fishhook
+
+SPEC CHECKSUMS:
+  Bugly: 4edda9bb0e3017fd453612189069757195fa23ca
+  fishhook: ea19933abfe8f2f52c55fd8b6e2718467d3ebc89
+
+PODFILE CHECKSUM: e4461ade7fea7b45d3b293c132b23bc9fe79e212
+
+COCOAPODS: 1.9.1
