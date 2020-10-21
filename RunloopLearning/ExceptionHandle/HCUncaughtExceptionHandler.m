@@ -166,6 +166,7 @@ void MineSetUncaughtExceptionHandler(NSUncaughtExceptionHandler * _Nullable hand
      (objc_uncaught_exception_handler) uncaught_handler = 0x00007fff3ba23722 (CoreFoundation`__handleUncaughtException)
      
      */
+    // 这里先设置自己的在设置bugly的则没有问题，如果先设置bugly在设置自己的，则bugly会一致尝试去设置handler
     //[Bugly startWithAppId:@"7e8a06bf19"];
     NSSetUncaughtExceptionHandler(&HCUncaughtExceptionHandles);
     // 测试重复加入一个handler，验证去重逻辑
