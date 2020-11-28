@@ -32,6 +32,7 @@
     self.testScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self testRunloopRun];
     [self testRunloopTimerWhileScroll];
+    [self testRunPerformSelector];
 //    [self asyncTestDefaultQueueCallMainThread];
 //    [self testMulThread];
 //    [self testRunloop];
@@ -60,6 +61,22 @@
 }
 
 #pragma mark - Private Method
+
+- (void)testRunPerformSelector {
+    // 这里考察的就是run的机制，run什么时候退出，没有任务直接退出，有任务就任务完成退出
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSLog(@"111");
+        [[NSRunLoop currentRunLoop] run]; // if run here, log 111 222 444
+        NSLog(@"222");
+        [self performSelector:@selector(testLog) withObject:nil afterDelay:1];
+        //[[NSRunLoop currentRunLoop] run]; // if run here, log 111 222 333 444
+        NSLog(@"444");
+    });
+}
+
+- (void)testLog {
+    NSLog(@"333");
+}
 
 - (void)testException {
     NSArray *array = [NSArray arrayWithObjects:@"1", @"2", nil];
