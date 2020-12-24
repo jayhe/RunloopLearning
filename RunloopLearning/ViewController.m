@@ -30,11 +30,16 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.testScrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     self.testScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [self testRunloopRun];
-    [self testRunloopTimerWhileScroll];
-    [self testRunPerformSelector];
+    //[self testRunloopRun];
+    //[self testRunloopTimerWhileScroll];
+    //[self testRunPerformSelector];
 //    [self asyncTestDefaultQueueCallMainThread];
+//    [self syncTestDefaultQueueSyncCallDefaultQueue];
+//    [self syncTestConcurrentQueueSyncCallConcurrentQueue];
+//    [self syncTestConcurrentQueueSyncCallConcurrentQueue1];
 //    [self testMulThread];
+    [self testDoTaskSyncOnMainThread];
+//    [self testDoTaskAsyncOnMainThread];
 //    [self testRunloop];
 }
 
@@ -92,6 +97,7 @@
 
 - (void)asyncTestDefaultQueueCallMainThread {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ // 这样会死
         NSLog(@"excute in thread:%@ \nlog1", [NSThread currentThread]);
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSLog(@"excute in thread:%@ \nlog2", [NSThread currentThread]);
@@ -123,15 +129,93 @@
      */
 }
 
+- (void)syncTestDefaultQueueSyncCallDefaultQueue {
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"excute in thread:%@ \nlog0", [NSThread currentThread]);
+    });
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"excute in thread:%@ \nlog1", [NSThread currentThread]);
+        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"excute in thread:%@ \nlog2", [NSThread currentThread]);
+        });
+        NSLog(@"excute in thread:%@ \nlog3", [NSThread currentThread]);
+    });
+    // 居然没有切换线程
+    /*
+     2020-12-23 12:24:16.243429+0800 RunloopLearning[10050:3185765] excute in thread:<NSThread: 0x60000199c1c0>{number = 1, name = main}
+     log1
+     2020-12-23 12:24:16.243665+0800 RunloopLearning[10050:3185765] excute in thread:<NSThread: 0x60000199c1c0>{number = 1, name = main}
+     log2
+     2020-12-23 12:24:16.243829+0800 RunloopLearning[10050:3185765] excute in thread:<NSThread: 0x60000199c1c0>{number = 1, name = main}
+     log3
+     */
+    /*
+     * As an optimization, dispatch_sync() invokes the workitem on the thread which
+     * submitted the workitem, except when the passed queue is the main queue or
+     * a queue targetting it (See dispatch_queue_main_t,
+     * dispatch_set_target_queue()).
+     *
+     系统会优化，会直接在提交任务的当前线程执行提交的同步任务，提交任务到主线程除外
+     */
+}
+
+- (void)syncTestConcurrentQueueSyncCallConcurrentQueue {
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"excute in thread:%@ \nlog00", [NSThread currentThread]);
+    });
+    dispatch_queue_t queue = dispatch_queue_create("com.test.gcd.concurrent", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_sync(queue, ^{
+        NSLog(@"excute in thread:%@ \nlog11", [NSThread currentThread]);
+        dispatch_sync(queue, ^{
+            NSLog(@"excute in thread:%@ \nlog22", [NSThread currentThread]);
+        });
+        NSLog(@"excute in thread:%@ \nlog33", [NSThread currentThread]);
+    });
+    // 居然没有切换线程
+    /*
+     2020-12-23 12:27:23.396859+0800 RunloopLearning[10138:3188531] excute in thread:<NSThread: 0x600002fac500>{number = 1, name = main}
+     log11
+     2020-12-23 12:27:23.396996+0800 RunloopLearning[10138:3188531] excute in thread:<NSThread: 0x600002fac500>{number = 1, name = main}
+     log22
+     2020-12-23 12:27:23.397091+0800 RunloopLearning[10138:3188531] excute in thread:<NSThread: 0x600002fac500>{number = 1, name = main}
+     log33
+     */
+}
+
+- (void)syncTestConcurrentQueueSyncCallConcurrentQueue1 {
+    dispatch_queue_t queue = dispatch_queue_create("com.test.gcd.concurrent", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_async(queue, ^{
+        NSLog(@"excute in thread:%@ \nlog111", [NSThread currentThread]);
+        dispatch_sync(queue, ^{
+            NSLog(@"excute in thread:%@ \nlog222", [NSThread currentThread]);
+            dispatch_sync(queue, ^{
+                NSLog(@"excute in thread:%@ \nlog333", [NSThread currentThread]);
+            });
+        });
+        NSLog(@"excute in thread:%@ \nlog444", [NSThread currentThread]);
+    });
+    /*
+     2020-12-23 13:45:16.972327+0800 RunloopLearning[10869:3219274] excute in thread:<NSThread: 0x600003676700>{number = 5, name = (null)}
+     log111
+     2020-12-23 13:45:19.958500+0800 RunloopLearning[10869:3219274] excute in thread:<NSThread: 0x600003676700>{number = 5, name = (null)}
+     log222
+     2020-12-23 13:45:26.475293+0800 RunloopLearning[10869:3219274] excute in thread:<NSThread: 0x600003676700>{number = 5, name = (null)}
+     log333
+     2020-12-23 13:45:37.111447+0800 RunloopLearning[10869:3219274] excute in thread:<NSThread: 0x600003676700>{number = 5, name = (null)}
+     log444
+     */
+}
+
 - (void)testMulThread {
 #define TEST_QUEUE_DEADLOCK 1
 #if TEST_QUEUE_DEADLOCK
     NSLog(@"excute in thread:%@ \nlog0", [NSThread currentThread]);
     dispatch_queue_t queue = dispatch_queue_create("com.test.gcd", DISPATCH_QUEUE_SERIAL);
+//    dispatch_async(queue, ^{
     dispatch_sync(queue, ^{
         NSLog(@"excute in thread:%@ \nlog1", [NSThread currentThread]);
 //        dispatch_sync(queue, ^{ // deadlock
-        dispatch_sync(dispatch_get_main_queue(), ^{ // deadlock
+        dispatch_async(dispatch_get_main_queue(), ^{ // no deadlock
             // 0x10b0c2a01 <+420>: leaq   0x274f0(%rip), %rcx       ; "BUG IN CLIENT OF LIBDISPATCH: dispatch_sync called on queue already owned by current thread"
             NSLog(@"excute in thread:%@ \nlog2", [NSThread currentThread]);
         });
@@ -239,6 +323,125 @@
      #endif
      _dispatch_sync_invoke_and_complete_recurse(top_dq, ctxt, func,top_dc_flags);
      }
+     */
+}
+
+void dispatch_async_on_main_queue(void (^block)(void)) {
+    if ([NSThread isMainThread]) {
+        block();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
+}
+
+void dispatch_sync_on_main_queue(void (^block)(void)) {
+    if ([NSThread isMainThread]) {
+        block();
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    }
+}
+
+- (void)testDoTaskSyncOnMainThread {
+#define TestCase1 0
+#define TestCase2 0
+#define TestCase3 0
+#define TestCase4 1
+#if TestCase1
+    // case 1
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_sync_on_main_queue(^{
+                NSLog(@"case 1 %s\n OnThread:%@", __FUNCTION__, [NSThread currentThread]);
+            });
+            NSLog(@"case 1 do another task OnThread:%@",[NSThread currentThread]);
+        });
+        NSLog(@"case 1 testDoTaskSyncOnMainThread");
+        /*
+         2020-12-24 16:12:30.709649+0800 RunloopLearning[22633:521605] case 1 testDoTaskSyncOnMainThread
+         2020-12-24 16:12:30.772703+0800 RunloopLearning[22633:521605] case 1 -[ViewController testDoTaskSyncOnMainThread]_block_invoke_2
+          OnThread:<NSThread: 0x600002df0a80>{number = 1, name = main}
+         2020-12-24 16:12:30.773024+0800 RunloopLearning[22633:521868] case 1 do another task OnThread:<NSThread: 0x600002dbd6c0>{number = 3, name = (null)}
+         */
+    }
+    return;
+#endif
+#if TestCase2
+    // case 2
+    {
+        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_sync_on_main_queue(^{
+                NSLog(@"case 2 %s\n OnThread:%@", __FUNCTION__, [NSThread currentThread]);
+            });
+            NSLog(@"case 2 do another task OnThread:%@",[NSThread currentThread]);
+        });
+        NSLog(@"case 2 testDoTaskSyncOnMainThread");
+        /*
+         2020-12-24 16:13:03.028826+0800 RunloopLearning[22660:522420] case 2 -[ViewController testDoTaskSyncOnMainThread]_block_invoke_2
+          OnThread:<NSThread: 0x600003e888c0>{number = 1, name = main}
+         2020-12-24 16:13:03.029261+0800 RunloopLearning[22660:522420] case 2 do another task OnThread:<NSThread: 0x600003e888c0>{number = 1, name = main}
+         2020-12-24 16:13:03.029394+0800 RunloopLearning[22660:522420] case 2 testDoTaskSyncOnMainThread
+         */
+    }
+    return;
+#endif
+#if TestCase3
+    {
+        dispatch_queue_t queue = dispatch_queue_create("com.test.gcd", DISPATCH_QUEUE_SERIAL);
+        dispatch_sync(queue, ^{
+            NSLog(@"case 3 testDoTaskSyncOnMainThread begin and OnThread:%@", [NSThread currentThread]);
+            dispatch_sync_on_main_queue(^{
+                NSLog(@"case 3 %s\n OnThread:%@", __FUNCTION__, [NSThread currentThread]);
+            });
+            NSLog(@"case 3 do another task OnThread:%@",[NSThread currentThread]);
+        });
+        NSLog(@"case 3 testDoTaskSyncOnMainThread end and OnThread:%@", [NSThread currentThread]);
+        /*
+         2020-12-24 16:21:43.384532+0800 RunloopLearning[22881:529011] case 3 testDoTaskSyncOnMainThread begin and OnThread:<NSThread: 0x6000037b0a40>{number = 1, name = main}
+         2020-12-24 16:21:43.384799+0800 RunloopLearning[22881:529011] case 3 -[ViewController testDoTaskSyncOnMainThread]_block_invoke_2
+          OnThread:<NSThread: 0x6000037b0a40>{number = 1, name = main}
+         2020-12-24 16:21:43.384971+0800 RunloopLearning[22881:529011] case 3 do another task OnThread:<NSThread: 0x6000037b0a40>{number = 1, name = main}
+         2020-12-24 16:21:43.385111+0800 RunloopLearning[22881:529011] case 3 testDoTaskSyncOnMainThread end and OnThread:<NSThread: 0x6000037b0a40>{number = 1, name = main}
+         */
+    }
+    return;
+#endif
+#if TestCase4
+    {
+        dispatch_queue_t queue = dispatch_queue_create("com.test.gcd", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(queue, ^{
+            NSLog(@"case 4 testDoTaskSyncOnMainThread begin and OnThread:%@", [NSThread currentThread]);
+            dispatch_sync_on_main_queue(^{
+                NSLog(@"case 4 %s\n OnThread:%@", __FUNCTION__, [NSThread currentThread]);
+            });
+            NSLog(@"case 4 do another task OnThread:%@",[NSThread currentThread]);
+        });
+        NSLog(@"case 4 testDoTaskSyncOnMainThread end and OnThread:%@", [NSThread currentThread]);
+        /*
+         2020-12-24 16:23:41.188313+0800 RunloopLearning[22934:530733] case 4 testDoTaskSyncOnMainThread end and OnThread:<NSThread: 0x600003db82c0>{number = 1, name = main}
+         2020-12-24 16:23:41.193065+0800 RunloopLearning[22934:530807] case 4 testDoTaskSyncOnMainThread begin and OnThread:<NSThread: 0x600003df6c40>{number = 5, name = (null)}
+         2020-12-24 16:23:41.256800+0800 RunloopLearning[22934:530733] case 4 -[ViewController testDoTaskSyncOnMainThread]_block_invoke_2
+          OnThread:<NSThread: 0x600003db82c0>{number = 1, name = main}
+         2020-12-24 16:23:41.256959+0800 RunloopLearning[22934:530807] case 4 do another task OnThread:<NSThread: 0x600003df6c40>{number = 5, name = (null)}
+         */
+    }
+    return;
+#endif
+}
+
+- (void)testDoTaskAsyncOnMainThread {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async_on_main_queue(^{
+            NSLog(@"%s\n OnThread:%@", __FUNCTION__, [NSThread currentThread]);
+        });
+        NSLog(@"do another task");
+    });
+    NSLog(@"testDoTaskAsyncOnMainThread");
+    /*
+     2020-12-24 15:52:40.824594+0800 RunloopLearning[22235:508263] testDoTaskAsyncOnMainThread
+     2020-12-24 15:52:40.824696+0800 RunloopLearning[22235:508380] do another task
+     2020-12-24 15:52:40.880142+0800 RunloopLearning[22235:508263] -[ViewController testDoTaskAsyncOnMainThread]_block_invoke_2
+      OnThread:<NSThread: 0x600003a58040>{number = 1, name = main}
      */
 }
 

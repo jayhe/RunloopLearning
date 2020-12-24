@@ -124,7 +124,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "489ECF79-6D7E-4526-9822-55466DA92B90"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RunloopLearning/ExceptionHandle/HCUncaughtExceptionHandler.m"
@@ -188,7 +188,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "937BB26E-AFE8-4AE7-88A7-747503AC2043"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RunloopLearning/ExceptionHandle/HCUncaughtExceptionHandler.m"
@@ -213,6 +213,22 @@
             startingLineNumber = "237"
             endingLineNumber = "237"
             landmarkName = "+exceptionHandle:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "04C28CA8-BF4D-45C6-BC0D-721114874A52"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RunloopLearning/ViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
+            landmarkName = "-testMulThread"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
