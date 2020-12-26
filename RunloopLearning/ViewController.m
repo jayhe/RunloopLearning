@@ -540,11 +540,7 @@ BOOL HCCheckIsInQueue(dispatch_queue_t queue) { // 获取当前任务执行的�
     static void *someQueueKey = &someQueueKey;
     void *cachedValue = dispatch_queue_get_specific(queue, someQueueKey);
     if (!cachedValue) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            dispatch_queue_set_specific(queue,
-                                        someQueueKey, someQueueKey, NULL);
-        });
+        dispatch_queue_set_specific(queue, someQueueKey, someQueueKey, NULL);
     }
     pthread_mutex_unlock(&mutex);
     return dispatch_get_specific(someQueueKey) == someQueueKey;
