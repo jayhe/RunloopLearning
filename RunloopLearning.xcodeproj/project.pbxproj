@@ -134,7 +134,6 @@
 				99063522C5DDC7559C5FB504 /* Pods-RunloopLearning.debug.xcconfig */,
 				33ECF7316F712EF91FFDDEAB /* Pods-RunloopLearning.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

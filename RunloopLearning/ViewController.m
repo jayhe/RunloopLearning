@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <objc/runtime.h>
+#import <pthread/pthread.h>
 
 @interface ViewController () <NSMachPortDelegate>
 
@@ -408,6 +409,11 @@ void dispatch_sync_on_main_queue(void (^block)(void)) {
 #endif
 #if TestCase4
     {
+        if (HCCheckIsInQueue(dispatch_get_main_queue())) {
+            NSLog(@"Is In main queue");
+        } else {
+            NSLog(@"Is Not In main queue");
+        }
         dispatch_queue_t queue = dispatch_queue_create("com.test.gcd", DISPATCH_QUEUE_SERIAL);
         dispatch_async(queue, ^{
             NSLog(@"case 4 testDoTaskSyncOnMainThread begin and OnThread:%@", [NSThread currentThread]);
@@ -514,6 +520,34 @@ code_break:
 
 - (void)loopLog {
     NSLog(@"excute loopLog");
+}
+
+#pragma mark - 如何判断是否是某个队列
+
+BOOL HCCheckIsMainQueue() { // 判断当前任务执行的queue是否是主队列
+    static void *mainQueueKey = &mainQueueKey;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dispatch_queue_set_specific(dispatch_get_main_queue(),
+                                    mainQueueKey, mainQueueKey, NULL);
+    });
+    return dispatch_get_specific(mainQueueKey) == mainQueueKey;
+}
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+BOOL HCCheckIsInQueue(dispatch_queue_t queue) { // 获取当前任务执行的队列是否是传入的队列
+    pthread_mutex_lock(&mutex);
+    static void *someQueueKey = &someQueueKey;
+    void *cachedValue = dispatch_queue_get_specific(queue, someQueueKey);
+    if (!cachedValue) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            dispatch_queue_set_specific(queue,
+                                        someQueueKey, someQueueKey, NULL);
+        });
+    }
+    pthread_mutex_unlock(&mutex);
+    return dispatch_get_specific(someQueueKey) == someQueueKey;
 }
 
 #pragma mark - Runloop Run
